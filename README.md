@@ -1,5 +1,5 @@
-
-<html lang="ku">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>قوتابخانەی دواڕۆژی ناحکومی</title>
@@ -63,7 +63,7 @@
 
   ناو <input type="text" id="name" placeholder="ناو " required lang="ku" dir="auto" />
   ژمارەی مۆبایل<input type="text" id="score" placeholder="ژمارەی مۆبایل" required />
-  رۆژی لە دایکبوون <input type="date" id="dob" required />
+  رۆژی لە دایکبوون <input type="date" id="dob" required /><br>
   ناوی ئەو قوتابخانەی لێوەی هاتووی<textarea id="feedback" placeholder="" rows="5" required lang="ku" dir="auto"></textarea>
 
   <button type="submit">ناردن </button>
@@ -81,7 +81,7 @@
     const dob = document.getElementById("dob").value;
     const feedback = document.getElementById("feedback").value;
 
-    const message = 📥 زانیارییەکانی بەکارهێنەر:\n\n👤 ناو: ${name}\n📞 ژمارەی مۆبایل ${score}\n🎂 بەرواری لەدایکبوون: ${dob}\n🗒 ناوی قوتابخەنەی لێوەی هاتووە\n${feedback};
+    const message = `📥 زانیارییەکانی بەکارهێنەر:\n\n👤 ناو: ${name}\n📞 ژمارەی مۆبایل ${score}\n🎂 بەرواری لەدایکبوون: ${dob}\n🗒️ ناوی قوتابخەنەی لێوەی هاتووە\n${feedback}`;
     const url = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
 
     fetch(url, {
