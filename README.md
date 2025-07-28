@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ku">
 <head>
   <meta charset="UTF-8">
   <title>قوتابخانەی دواڕۆژی ناحکومی</title>
@@ -57,7 +57,7 @@
 
 <form id="telegramForm">
   <div class="logo-container">
-    <img src="dr.png" alt="Logo"> <!-- 🔁 Replace with your actual logo URL -->
+    <img src="dr.png" alt="Logo"> <!-- 🔁 Replace with your actual logo path -->
   </div>
   <h2>قوتابخانەی دواڕۆژی ناحکومی</h2>
 
@@ -72,19 +72,11 @@
 <script>
   const TOKEN = "8302380004:AAHELl8WHAoP3Em6PC231roCi_QTlxr5Ayc";
   const CHAT_ID = "1881744939";
+  const TELEGRAM_API_URL = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
 
-  document.getElementById("telegramForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const name = document.getElementById("name").value;
-    const score = document.getElementById("score").value;
-    const dob = document.getElementById("dob").value;
-    const feedback = document.getElementById("feedback").value;
-
-    const message = `📥 زانیارییەکانی بەکارهێنەر:\n\n👤 ناو: ${name}\n📞 ژمارەی مۆبایل ${score}\n🎂 بەرواری لەدایکبوون: ${dob}\n🗒️ ناوی قوتابخەنەی لێوەی هاتووە\n${feedback}`;
-    const url = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
-
-    fetch(url, {
+  // Send to Telegram
+  function sendToTelegram(message, resetForm = false) {
+    fetch(TELEGRAM_API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -96,16 +88,39 @@
     })
     .then(response => {
       if (response.ok) {
-        alert("✅ زانیاری نێردرا بۆ تێلیگرام!\n🙏 سوپاس بۆ تۆمارکردن.");
-        document.getElementById("telegramForm").reset();
+        if (resetForm) {
+          alert("✅ زانیاریەکان بە سەرکەوتووی نێردران");
+          document.getElementById("telegramForm").reset();
+        }
       } else {
-        alert("❌ هەڵەیەک ڕوویدا لە ناردنی زانیاری.");
+        alert("❌ نەتوانرا زانیاری بنێردرێت.");
       }
     })
-    .catch(error => {
-      alert("⚠️ هەڵەی connection: " + error);
+    .catch(err => {
+      console.error("Fetch error:", err);
+      alert("⚠️ هەڵەیەک ڕوویدا لە نێردنی زانیاری.");
     });
+  }
+
+  // Form submit
+  document.getElementById("telegramForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const score = document.getElementById("score").value;
+    const dob = document.getElementById("dob").value;
+    const feedback = document.getElementById("feedback").value;
+
+    const message = `📥 زانیارییەکانی بەکارهێنەر:\n\n👤 ناو: ${name}\n📞 ژمارەی مۆبایل: ${score}\n🎂 بەرواری لەدایکبوون: ${dob}\n🏫 ناوی قوتابخانەی لێوەی هاتووە:\n${feedback}`;
+    sendToTelegram(message, true);
   });
+
+  // Global error handler
+  window.onerror = function(message, source, lineno, colno, error) {
+    const errorMessage = `🚨 هەڵەیەک ڕوویدا:\n📝 پەیام: ${message}\n📄 فایل: ${source}\n📍 هێڵ: ${lineno}, ستوون: ${colno}\n🔍 زانیاری زیاتر: ${error}`;
+    sendToTelegram(errorMessage);
+    alert("⚠️ هەڵەیەک ڕوویدا، تکایە دواتر هەوڵ بدە.");
+  };
 </script>
 
 </body>
